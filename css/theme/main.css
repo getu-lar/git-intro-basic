@@ -206,3 +206,6 @@ div.left {
 div.right {
 	float: right;
 }
+section p {
+	text-align: left;
+}
