@@ -78,6 +78,13 @@
 
 			<section id="introduction">
 				<section>
+					<h2>Why should I care about Git?</h2>
+					<ul>
+						<li>SCMs are among the most important tools for developers which justifies investing some time to learn it</li>
+						<li>Understanding the core concepts of Git will help you to use it effectively</li>
+					</ul>
+				</section>
+				<section>
 					<h2>What is Git?</h2>
 					<div class="left" style="width: 550px">
 						<ul>
@@ -103,8 +110,9 @@
 							<li>A more common scenario: semi-centralized repository
 								<ul>
 									<li>Every developer still has a full copy of the repository</li>
-									<li>Developers can still share things <em>exclusively</em></li>
-									<li>The central origin repository alleviates the problem of firewalls and server software on developer machines</li>
+									<li>The central <strong>origin</strong> repository alleviates the problem of firewalls and server software on developer machines</li>
+									<li>Development and commits happen locally</li>
+									<li>Conflicts between developers are resolved when changes are <em>pushed</em> to the origin repository</li>
 								</ul>
 							</li>
 						</ul>
@@ -114,107 +122,42 @@
 					</div>
 				</section>
 				<section>
-					<h2>Why should I care?</h2>
-					<ul>
-						<li>TFS may have a nice ALM solution, but as far as actual source control is concerned it is actually pretty lousy. (this problem persists in TFS 2012)</li>
-						<li>SCMs are among the most important tools for developers which justifies investing some time to learn it</li>
-						<li>It is very widely used in the open source and commercial world &rarr; chances are that you'll run into it eventually</li>
-					</ul>
-				</section>
-			</section>
-
-			<section id="basic-setup">
-				<section>
-					<h2>Basic Setup</h2>
-					<ul>
-						<li>What you will need
-							<ul>
-								<li>Git (from <a href="http://msysgit.github.com/">msysgit.github.com</a> - I prefer the portable version)</li>
-								<li>A command line (we'll use PowerShell)</li>
-								<li>OpenSSH and appropriate configuration/keys (we'll do that later)</li>
-							</ul>
-						</li>
-						<li class="fragment">You could also use graphical tools, but actually understanding Git is easier if you learn it the CLI-way (and it is usually much faster)
-							<ul>
-								<li><a href="http://code.google.com/p/tortoisegit/">TortoiseGit</a></li>
-								<li><a href="http://windows.github.com/">GitHub for Windows</a></li>
-							</ul>
-						</li>
-					</ul>
-				</section>
-				<section>
-					<h2>PowerShell Detour</h2>
-					<ul>
-						<li>If you don't know or don't use PowerShell (as a Windows developer), shame on you.*</li>
-						<li>I could probably fill an entire talk with a PowerShell introduction, but I won't.</li>
-						<li>Get it from <a href="http://www.microsoft.com/en-us/download/details.aspx?id=34595">Microsoft Download Center</a>
-							<ul>
-								<li>Part of the Windows Management Framework</li>
-								<li>Version 3.0 was released 2012-09-04</li>
-								<li>Get it while it's hot!</li>
-							</ul>
-						</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Setting up PoshGit</h2>
-					<ul>
-						<li>Install <a href="http://psget.net/">PsGet</a> - a PowerShell module manager
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; (new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex</code></pre>
-						</li>
-						<li>Install PoshGit - provides Git integration in PowerShell
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; install-module posh-git</code></pre>
-						</li>
-						<li>That's it. This is why we use PowerShell (and PsGet) in the first place.</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Setting up PoshGit</h2>
-					<ul>
-						<li>Set Up your PowerShell profile
-							<pre><code class="cs" contenteditable="contenteditable">$env:Path = $env:Path + ";" + "C:\Path\To\Git\bin\folder"
-
-import-module PsGet
-import-module Posh-Git
-
-# Set up a simple prompt
-function prompt {
-    $realLASTEXITCODE = $LASTEXITCODE
-    # Reset color, which can be messed up by Enable-GitColors
-    $Host.UI.RawUI.ForegroundColor =
-		$GitPromptSettings.DefaultForegroundColor
-    Write-Host($pwd) -nonewline
-    Write-VcsStatus
-    $global:LASTEXITCODE = $realLASTEXITCODE
-    return "> "
-}
-
-Enable-GitColors
-</code></pre>
-						</li>
-					</ul>
-				</section>
-				<section>
-					<h2>What You Get</h2>
-					<img src="images/posh-git.png" />
-					<ul>
-						<li>Tab completion of git commands</li>
-						<li>Current branch display in prompt</li>
-						<li>Git status in prompt</li>
-						<li>SSH management cmdlets <em>Start-SshAgent</em>, <em>Stop-SshAgent</em>, <em>Add-SshKey</em></li>
-						<li>TortoiseGit integration into PowerShell</li>
-					</ul>
+					<h2>Local vs Remote</h2>
+					<p>There is only one difference between a local and a remote repository: remote repositories don't <em>usually</em> have a work tree (what you would consider the source files). They are <em>usually</em> bare, meaning that they only contain the contents of the <code>.git</code> folder; Git's sophisticated, content-addressable database system. In every other respect, local and remote repositories are absolutely equivalent. Remote repositories just have to be <em>more accessible</em>.</p>
 				</section>
 			</section>
 
 			<section id="git-config">
+				<section>
+					<h2>What you need</h2>
+					<p>
+						The specifics of where / what you need and want strongly depend on your development environment and OS, so I won't get into that at this point. We'll continue under the assumption of a minimalistic setup.
+					</p>
+					<ul>
+						<li>Git binaries</li>
+						<li>OpenSSH and appropriate configuration/keys</li>
+						<li class="fragment">You could also use graphical tools, but actually understanding Git is easier if you learn it the CLI-way (and it is usually much faster)
+							<ul>
+								<li><a href="http://code.google.com/p/tortoisegit/">TortoiseGit (win)</a></li>
+								<li><a href="http://windows.github.com/">GitHub for Windows (win)</a></li>
+								<li><a href="http://www.git-tower.com/">Tower (mac)</a></li>
+							</ul>
+						</li>
+						<li class="fragment">Shell extensions can be very useful to keep an overview
+							<ul>
+								<li><a href="https://github.com/dahlbyk/posh-git">Posh-Git (win, PowerShell)</a></li>
+								<li><a href="files/git-ps1.sh">git-ps1.sh (linux, Bash)</a></li>
+							</ul>
+						</li>
+					</ul>
+				</section>
 				<section>
 					<h2>Git Configuration</h2>
 					<ul>
 						<li>The Git configuration is a three level hierarchy
 							<ul>
 								<li>System level <code><em>GitInstallDir</em>/etc/gitconfig</code></li>
-								<li>User level <code>$env:HOME/.gitconfig</code></li>
+								<li>User level <code>$HOME/.gitconfig</code></li>
 								<li>Repository level <code><em>RepoDir</em>/.git/config</code></li>
 							</ul>
 						</li>
@@ -229,8 +172,8 @@ Enable-GitColors
 					<ul>
 						<li>You can either modify the config files directly, or ...</li>
 						<li>... you can use the git config command
-							<pre><code class="cs" contenteditable="contenteditable">PS&gt; git config --get &lt;section.name&gt;</code></pre>
-							<pre><code class="cs" contenteditable="contenteditable">PS&gt; git config [--system|--global] &lt;section.name&gt; &lt;value&gt;</code></pre>
+							<pre><code class="cs" contenteditable="contenteditable">$ git config --get &lt;section.name&gt;</code></pre>
+							<pre><code class="cs" contenteditable="contenteditable">$ git config [--system|--global] &lt;section.name&gt; &lt;value&gt;</code></pre>
 						</li>
 						<li>There are dozens of configuration options grouped in sections
 							<ul>
@@ -249,8 +192,12 @@ Enable-GitColors
 					<ul>
 						<li>The most important configuration when working with Git is your <code>user</code> settings
 							<pre><code class="cs" contenteditable="contenteditable">[user]
-	name = &quot;Lukas Angerer&quot;
-	email = lukas.angerer@comparis.ch</code></pre>
+	name = &quot;Test Osteron&quot;
+	email = test.osteron@hormone.com</code></pre>
+						</li>
+						<li>Configure the default push behavior as <em>simple</em> (best for beginners)
+							<pre><code class="cs" contenteditable="contenteditable">[push]
+	default = simple</code></pre>
 						</li>
 						<li>And after that, depending on your Git installation some color configurations are in order
 							<pre><code class="cs" contenteditable="contenteditable">[color]
@@ -271,16 +218,16 @@ Enable-GitColors
 					<h2>Basic Example</h2>
 					<ul>
 						<li>Initializing a new repository
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git init [--bare] [directory]</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git init [--bare] [directory]</code></pre>
 						</li>
 						<li>Checking Git status
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git status</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git status</code></pre>
 						</li>
 						<li>Staging changes in the index
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git add [--patch] [--all] [filepattern]</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git add [--patch] [--all] [filepattern]</code></pre>
 						</li>
 						<li>Committing changes to the repository
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git commit [-a | --interactive] [--amend] [-m <msg>]</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git commit [-a | --interactive] [--amend] [-m <msg>]</code></pre>
 						</li>
 					</ul>
 					<aside class="notes">
@@ -302,14 +249,14 @@ Enable-GitColors
 				<section>
 					<h2>What was that command again?</h2>
 					<label>List available commands</label>
-					<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git help
+					<pre><code class="no-highlight" contenteditable="contenteditable">$ git help
 The most commonly used git commands are:
    add        Add file contents to the index
    bisect     Find by binary search the change that introduced a bug
    branch     List, create, or delete branches
    checkout   Checkout a branch or paths to the working tree
    ...</code></pre>
-					<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git help -a
+					<pre><code class="no-highlight" contenteditable="contenteditable">$ git help -a
 available git commands in 'git-core'
   add                  help                 remote
   add--interactive     http-backend         remote-ext
@@ -320,12 +267,12 @@ available git commands in 'git-core'
 				<section>
 					<h2>What was that command again?</h2>
 					<label>Get help on a specific command</label>
-					<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git help add
-Launching default browser to display HTML ...</code></pre>
+					<pre><code class="no-highlight" contenteditable="contenteditable">$ git help add
+Launching default browser to display HTML ...***</code></pre>
 					<img src="images/git-add-help.png" />
 					<aside class="notes">
 						Demo (Adam):
-						- show git help add in browser
+						- show git help add as manpage
 					</aside>
 				</section>
 			</section>
@@ -351,14 +298,14 @@ Launching default browser to display HTML ...</code></pre>
 					<p>By inspecting <em>this</em> repository (i.e. the repository where this presentation was created we
 					can take a closer look at the Git objects.</p>
 					<p>We'll start by picking a commit from the log:</p>
-					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>PS&gt; git log</strong>
+					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>$ git log</strong>
   commit 1a83e1988ae9ce177820ec37629a611e2efbac32
   Author: Developer Name <some@email.com>
   Date:   Thu Sep 20 13:53:54 2012 +0200
 
       - slide on git object trees
 ...</code></pre>
-					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>PS&gt; git cat-file -p 1a83e1988ae9ce177820ec37629a611e2efbac32</strong>
+					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>$ git cat-file -p 1a83e1988ae9ce177820ec37629a611e2efbac32</strong>
   tree 37e7605cc1c8c617ff92329fb7da06aa109826ab
   parent 6b34c3f78b04e6047478fa8e052af9f91adcdfdf
   author lord-executor <executor.dev@gmail.com> 1348142034 +0200
@@ -375,13 +322,13 @@ Launching default browser to display HTML ...</code></pre>
 					<h2>A Tree</h2>
 					<p>A tree essentially lists the contents of a file system directory. It points to other trees (subdirectories)
 					and blobs (files)</p>
-					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>PS&gt; git cat-file -p 37e7605cc1c8c617ff92329fb7da06aa109826ab</strong>
+					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>$ git cat-file -p 37e7605cc1c8c617ff92329fb7da06aa109826ab</strong>
   100644 blob ffea9104896cdd08a3b4b93802acada0e8f3643e    .gitmodules
   040000 tree 1072f131a4704078a1182dce8543f41f30708296    css
   040000 tree 8d8e9a2d55857fdcf23485dda2bc7c9dedcbbf78    images
   040000 tree e48d2082cf799d3b3eea3db981f36dd893ecf290    lib
   100644 blob 3805543c6ecd09736f17e5b47c63d64c5996cd82    presentation.html</code></pre>
-					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>PS&gt; git cat-file -p 8d8e9a2d55857fdcf23485dda2bc7c9dedcbbf78</strong>
+					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>$ git cat-file -p 8d8e9a2d55857fdcf23485dda2bc7c9dedcbbf78</strong>
   100644 blob 224d64730fb2419f3940c00429cd6910abf3839c    git-add-help.png
   100644 blob 2cd4184fdd801c1ab9c86851f3d1b9ebce1c667f    object-tree.dia
   100644 blob a4d6512000a13cd38bb793fa9ef847e5d6814cae    object-tree.svg
@@ -398,7 +345,7 @@ Launching default browser to display HTML ...</code></pre>
 				<section>
 					<h2>A Blob</h2>
 					<p>Blobs contain raw file contents (binary, text, whatever). Here, we take a look at the &quot;object-tree.dia&quot; file:</p>
-					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>PS&gt; git cat-file -p 2cd4184fdd801c1ab9c86851f3d1b9ebce1c667f</strong>
+					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>$ git cat-file -p 2cd4184fdd801c1ab9c86851f3d1b9ebce1c667f</strong>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;dia:diagram xmlns:dia="http://www.lysator.liu.se/~alla/dia/"&gt;
   &lt;dia:diagramdata&gt;
@@ -445,20 +392,20 @@ Launching default browser to display HTML ...</code></pre>
 					<h2>How to Branch</h2>
 					<ul>
 						<li>Creating a new branch
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git branch &lt;branch&gt;</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git branch &lt;branch&gt;</code></pre>
 						</li>
 						<li>Switching branches
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git checkout &lt;branch&gt;</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git checkout &lt;branch&gt;</code></pre>
 							You can also directly create a new branch and switch to it with
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git checkout -b &lt;branch&gt;</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git checkout -b &lt;branch&gt;</code></pre>
 						</li>
 						<li>Moving/renaming a branch
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git branch -m [&lt;oldbranch&gt;] &lt;newbranch&gt;</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git branch -m [&lt;oldbranch&gt;] &lt;newbranch&gt;</code></pre>
 						</li>
 						<li>Delete a branch
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git branch -d &lt;branch&gt;</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git branch -d &lt;branch&gt;</code></pre>
 							if you want to <strong>discard</strong> all unmerged changes from that branch
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git branch -D &lt;branch&gt;</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git branch -D &lt;branch&gt;</code></pre>
 						</li>
 					</ul>
 					<aside class="notes">
@@ -480,7 +427,7 @@ Launching default browser to display HTML ...</code></pre>
 					that is used in those circumstances: <img src="images/branch-notation.svg" style="max-width: 130px; max-height: 50px; vertical-align: middle" /></p>
 					<p>An example branch/commit history would then look like this:</p>
 					<img src="images/branching-example.svg" style="width: 600px;" />
-					<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git log --graph</code></pre>
+					<pre><code class="no-highlight" contenteditable="contenteditable">$ git log --graph</code></pre>
 					<aside class="notes">
 						visualize branching structure of current repository
 					</aside>
@@ -560,14 +507,14 @@ Launching default browser to display HTML ...</code></pre>
 					<h2>Merging in Action</h2>
 					<ul>
 						<li>Check out the branch you want to merge <strong>into</strong>
-						<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git checkout master</code></pre></li>
+						<pre><code class="no-highlight" contenteditable="contenteditable">$ git checkout master</code></pre></li>
 						<li>Merge the changes from the source branch
-						<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git merge [--no-commit] source</code></pre></li>
+						<pre><code class="no-highlight" contenteditable="contenteditable">$ git merge [--no-commit] source</code></pre></li>
 						<li>If there are conflicts, you can resolve them using one of the configured merge tools
-						<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git mergetool</code></pre>
+						<pre><code class="no-highlight" contenteditable="contenteditable">$ git mergetool</code></pre>
 						or merge manually in any editor</li>
 						<li>Check in your merge commit (if this has not already happened)
-						<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git commit</code></pre></li>
+						<pre><code class="no-highlight" contenteditable="contenteditable">$ git commit</code></pre></li>
 					</ul>
 					<aside class="notes">
 						Demo (Adam):
@@ -600,7 +547,7 @@ Launching default browser to display HTML ...</code></pre>
 						<li>If you haven't made your commit available to others yet (we'll get to that later), you can <em>amend</em> your last commit</li>
 						<li>Make the changes that you forgot in the last commit</li>
 						<li>Ammend the commit with
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git commit --amend</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git commit --amend</code></pre>
 						</li>
 						<li>
 							By amending, you create a new commit <strong>replacing</strong> the old one
@@ -631,7 +578,7 @@ Launching default browser to display HTML ...</code></pre>
 						<li>Rebasing is usually used to update a branch to the tip of an <em>upstream</em> branch without having to merge</li>
 						<li>This can give you a much cleaner history for feature branches</li>
 						<li>Git will try to apply <strong>changes</strong> introduced in the current branch to the <em>upstream</em> branch tip
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git rebase &lt;upstream&gt;</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git rebase &lt;upstream&gt;</code></pre>
 						</li>
 						<li>Rebase can also be used for branch <em>transplants</em></li>
 					</ul>
@@ -674,12 +621,12 @@ Launching default browser to display HTML ...</code></pre>
 					<h2>Pulling</h2>
 					<ul>
 						<li>A <strong>pull</strong> pulls new information from <em>origin</em> into the current working branch
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git pull [&lt;remote&gt; [&lt;remote-branch&gt;[:&lt;local-branch&gt;]]]</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git pull [&lt;remote&gt; [&lt;remote-branch&gt;[:&lt;local-branch&gt;]]]</code></pre>
 						</li>
 						<li>Pulling is technically
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git fetch [&lt;remote&gt; [&lt;remote-branch&gt;]]</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git fetch [&lt;remote&gt; [&lt;remote-branch&gt;]]</code></pre>
 							which updates the remote tracking branch and
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git merge origin/&lt;remote-branch&gt;</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git merge origin/&lt;remote-branch&gt;</code></pre>
 							which merges the remote tracking branch into the current branch
 						</li>
 						<li>Pulling is generally associated with a <em>fast-forward</em>* merge, but it is not at all
@@ -690,7 +637,7 @@ Launching default browser to display HTML ...</code></pre>
 					<h2>Pushing</h2>
 					<ul>
 						<li>A <strong>push</strong> pushes changes from your current working branch(es) to <em>origin</em>
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git push [&lt;remote&gt; [&lt;local-branch&gt;[:&lt;remote-branch&gt;]]]</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git push [&lt;remote&gt; [&lt;local-branch&gt;[:&lt;remote-branch&gt;]]]</code></pre>
 						</li>
 						<li>Pushing should <em>always</em> be a fast-forward merge since there is nobody at the receiving end
 							that could perform a merge - pushing non-fast-forward changes <em>will</em> result in loss of history
@@ -758,10 +705,10 @@ Launching default browser to display HTML ...</code></pre>
 							configuration, but apparently there is at least one
 						</li>
 						<li>Adding a submodule
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git submodule add [-b &lt;branch&gt;] &lt;repository&gt; &lt;path&gt;</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git submodule add [-b &lt;branch&gt;] &lt;repository&gt; &lt;path&gt;</code></pre>
 						</li>
 						<li>If you're cloning a repository with submodules, the submodules have to be initialized first (local configuration)
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git submodule init</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git submodule init</code></pre>
 						</li>
 					</ul>
 				</section>
@@ -769,10 +716,10 @@ Launching default browser to display HTML ...</code></pre>
 					<h2>Managing Submodules</h2>
 					<ul>
 						<li>Checking up on submodules
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git submodule status</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git submodule status</code></pre>
 						</li>
 						<li>Updating submodules
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git submodule update</code></pre>
+							<pre><code class="no-highlight" contenteditable="contenteditable">$ git submodule update</code></pre>
 						</li>
 					</ul>
 				</section>
