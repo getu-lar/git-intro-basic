@@ -4,17 +4,15 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Git on Windows</title>
-	<meta name="description" content="An intorduction to the Git SCM for Windows developers">
+	<title>Git Introduction</title>
+	<meta name="description" content="An intorduction to the Git SCM">
 	<meta name="author" content="Lukas Angerer">
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-	<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-
 	<link rel="stylesheet" href="lib/reveal/css/reveal.css">
-	<link rel="stylesheet" href="css/theme/comparis.css">
+	<link rel="stylesheet" href="css/theme/main.css">
 
 	<!-- For syntax highlighting -->
 	<link rel="stylesheet" href="lib/reveal/lib/css/zenburn.css">
@@ -30,13 +28,13 @@
 	<div class="reveal">
 		<div class="state-background">
 			<div class="footer">
-				<div class="cell3 date"><span>2012-09-13</span></div>
-				<div class="cell3 title"><span>Git on Windows</span></div>
-				<div class="cell3"><div class="logo"></div></div>
+				<div class="cell3 date"><span>2013-11-01</span></div>
+				<div class="cell3 title"><span>Git Introduction</span></div>
+				<!--<div class="cell3"><div class="logo"></div></div>-->
 			</div>
 		</div>
-		
-		<div class="slides"> 
+
+		<div class="slides">
 			<!--<section>
 				<pre id="notes"></pre>
 				<script>
@@ -45,12 +43,12 @@
 						$("aside.notes").each(function () {
 							notes.append($(this).parent().find("h2").text());
 							notes.append("\n**********");
-							
+
 							$.each($(this).text().split("\n"), function(index, line) {
 								notes.append(line.trim());
 								notes.append("\n");
 							});
-							
+
 							notes.append("**********\n");
 						});
 					});
@@ -58,37 +56,34 @@
 			</section>-->
 			<section id="title">
 				<section>
-					<h1>Git on Windows</h1>
-					<h2>CLI FTW</h2>
+					<h1>Git Introduction</h1>
+					<h2>A Git primer for SVN users</h2>
 				</section>
 				<section>
 					<h2>Summary</h2>
 					<ul>
 						<li>What is Git?</li>
-						<li>Setup / Prerequisites</li>
 						<li>Git Configuration</li>
 						<li>Git 101 Example</li>
 						<li>Inside Git</li>
+						<li>Fundamentals</li>
 						<li>Branching</li>
 						<li>Merging</li>
 						<li>History Management</li>
-						<li>Cloning</li>
-						<li>SSH Configuration</li>
 						<li>Remote Repositories</li>
 						<li>Submodules</li>
 					</ul>
 				</section>
 			</section>
-			
+
 			<section id="introduction">
 				<section>
 					<h2>What is Git?</h2>
-					
 					<div class="left" style="width: 550px">
 						<ul>
 							<li>Distributed Version Control System
 								<ul>
-									<li>Every developer has his/her own full copy of the repository (including all history)</li>
+									<li>Every developer has his/her own full copy of the repository (including all of its history)</li>
 									<li>Very heavy focus on easy branching and merging</li>
 									<li>Easy to use, but hard to use right</li>
 									<li>Designed and developed by Linus Torvalds</li>
@@ -127,7 +122,7 @@
 					</ul>
 				</section>
 			</section>
-			
+
 			<section id="basic-setup">
 				<section>
 					<h2>Basic Setup</h2>
@@ -178,7 +173,7 @@
 					<ul>
 						<li>Set Up your PowerShell profile
 							<pre><code class="cs" contenteditable="contenteditable">$env:Path = $env:Path + ";" + "C:\Path\To\Git\bin\folder"
-							
+
 import-module PsGet
 import-module Posh-Git
 
@@ -211,7 +206,7 @@ Enable-GitColors
 					</ul>
 				</section>
 			</section>
-			
+
 			<section id="git-config">
 				<section>
 					<h2>Git Configuration</h2>
@@ -270,7 +265,7 @@ Enable-GitColors
 					</aside>
 				</section>
 			</section>
-			
+
 			<section id="basic-example">
 				<section>
 					<h2>Basic Example</h2>
@@ -334,7 +329,7 @@ Launching default browser to display HTML ...</code></pre>
 					</aside>
 				</section>
 			</section>
-			
+
 			<section id="inside-git">
 				<section>
 					<h2>Inside Git</h2>
@@ -425,7 +420,7 @@ Launching default browser to display HTML ...</code></pre>
 					</aside>
 				</section>
 			</section>
-			
+
 			<section id="branches">
 				<section>
 					<h2>Branches</h2>
@@ -531,7 +526,7 @@ Launching default browser to display HTML ...</code></pre>
 					</aside>
 				</section>
 			</section>
-			
+
 			<section id="merging">
 				<section>
 					<h2>Merging</h2>
@@ -584,7 +579,7 @@ Launching default browser to display HTML ...</code></pre>
 					</aside>
 				</section>
 			</section>
-			
+
 			<section id="history">
 				<section>
 					<h2>Changing History</h2>
@@ -620,10 +615,10 @@ Launching default browser to display HTML ...</code></pre>
 						- git add TicTacToe.csproj
 						- git commit
 						- notice that stuff is missing
-						- git log & git show HEAD
+						- git log &amp; git show HEAD
 						- git add --all
 						- git commit --amend
-						- git log & git show HEAD
+						- git log &amp; git show HEAD
 					</aside>
 				</section>
 				<section>
@@ -657,165 +652,7 @@ Launching default browser to display HTML ...</code></pre>
 					</aside>
 				</section>
 			</section>
-			
-			<section id="sharing">
-				<section>
-					<h2>Clone Wars</h2>
-					<ul>
-						<li>Every git repository is a <strong>fully</strong> functional self-contained unit</li>
-						<li>Sharing a repository with somebody else is essentially creating a copy or <strong>clone</strong>
-						in Git terminology</li>
-						<li>Every repository can track any number of remote repositories and <strong>push</strong> /
-						<strong>pull</strong> changes to / from
-						them at any time.</li>
-						<li>Every repository that was cloned from another automatically tracks that remote repository which
-						(by convention) is called <strong>origin</strong></li>
-					</ul>
-				</section>
-				<section>
-					<h2>Sharing Among Friends</h2>
-					<ul>
-						<li>You can easily share repositories within / from
-							<ul>
-								<li>the local file system
-									<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git clone file:///path/to/origin/repository/</code></pre>
-								</li>
-								<li>a network share
-									<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git clone file:////server/share/repository/path/</code></pre>
-								</li>
-								<li>an FTP server
-									<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git clone ftp://host/path/to/repository/</code></pre>
-								</li>
-								<li>an <em>rsync</em> server
-									<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git clone rsync://host/path/to/repository/</code></pre>
-								</li>
-							</ul>
-						</li>
-					</ul>
-					<aside class="notes">
-						Demo (Bob):
-						- start bob's shell
-						- clone Adam's repository directly ("from-adam")
-						  git clone file:///$env:DEMOROOT/users/adam/TicTacToe from-adam
-						- show repository state
-						- workspace and configuration might be different, but the content of the repository is a CLONE
-					</aside>
-				</section>
-				<section>
-					<h2>Bare repositories</h2>
-					<ul>
-						<li><em>Bare</em> repositories are <em>HEAD</em>less repositories that just contain the Git metadata
-						and no working tree</li>
-						<li>They are very useful as shared repositories</li>
-						<li>Instead of sharing your <em>working</em> repository, export a shared bare repository that you and others
-						can push/pull to/from.
-							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git clone --bare file:///path/to/my/repo file:////server/public/repo</code></pre>
-						</li>
-						<li>Bare repositories only contain the contents of the <em>.git</em> directory, nothing else</li>
-					</ul>
-					<aside class="notes">
-						Demo (Adam & Bob):
-						- Adam: export repository to shared (bare) repository
-						- cd $env:DEMOROOT
-						- git clone --bare file:///$env:HOME/TicTacToe tictactoe.git
-						- show 'bare' repository contents
-						- Bob: clone the shared repository
-						- git clone file:///$env:DEMOROOT/tictactoe.git
-					</aside>
-				</section>
-				<section>
-					<h2>But what about Security?</h2>
-					<ul>
-						<li>Git itself does <strong>not</strong> contain any authentication or authorization mechanism</li>
-						<li>Git is designed to be easily integrated in existing authentication and authorization infrastructure
-							<ul>
-								<li>Local file system access control (Windows ACLs, Unix groups, ...)</li>
-								<li>HTTP basic authentication</li>
-								<li>SSH username/password or public key based access (this is what we'll be looking at)</li>
-							</ul>
-						</li>
-						<li>Access rights can only be specified on <strong>repository</strong> level; you cannot limit access to
-						subtrees in the repository</li>
-						<li>There are however ways to organize your repositories that give you the necessary level of granularity
-						(see <em>modules</em>)</li>
-					</ul>
-				</section>
-			</section>
-			
-			<section id="ssh-configuration">
-				<section>
-					<h2>SSH Configuration</h2>
-					<ul>
-						<li>The most commonly used authentication / authorization mechanism used for Git is SSH
-							<ul>
-								<li><a href="https://github.com/">https://github.com/</a></li>
-								<li><a href="https://bitbucket.org/">https://bitbucket.org/</a></li>
-								<li><a href="http://githost.com/">http://githost.com/</a></li>
-							</ul>
-						</li>
-						<li>Getting SSH to work properly under windows can be somewhat frustrating</li>
-						<li>What you need:
-							<ul>
-								<li>OpenSSH - comes with PortableGit</li>
-								<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a>, particularly
-								puttygen.exe to generate key pairs</li>
-								<li>At least one pair of public/private keys</li>
-								<li>Some configuration</li>
-							</ul>
-						</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Generating a Key Pair</h2>
-					<div style="float: right">
-						<img src="images/puttygen-key1.png" style="height: 250px;" /><br />
-						<img src="images/puttygen-key2.png" style="height: 250px;" />
-					</div>
-					<ul>
-						<li>Open PuTTY Key Generator</li>
-						<li>Generate a 2048 Bit SSH-2 RSA key</li>
-						<li>Set the comment to an identifier that will help you figure out which account it belongs to</li>
-						<li>Set a password for the private key</li>
-						<li>Copy the OpenSSH public key (store it somewhere safe)</li>
-						<li><em>Conversions &rarr; Export OpenSSH Key</em><br />to store your private
-						key</li>
-						<li>Keep it secret, keep it safe!<br />
-						Either by password protecting the key file or only storing it on your local (password protected)
-						machine</li>
-					</ul>
-					<aside class="notes">
-						Demo:
-						- create key pari with puttygen.exe
-					</aside>
-				</section>
-				<section>
-					<h2>Configuring OpenSSH</h2>
-					<ul>
-						<li>Create an <strong>.ssh</strong> directory in your <em>HOME</em> (<code>$env:HOME</code>)</li>
-						<li>Put your private key (or keys if you have more than one) in a <strong>.ssh/keys</strong> directory</li>
-						<li>Update your PowerShell profile to automatically start the SSH agent (responsible for managing
-							your identities)
-							<pre><code class="no-highlight" contenteditable="contenteditable">Start-SshAgent</code></pre>
-						</li>
-						<li>Also register all your keys on startup - that makes it a whole lot easier
-							<pre><code class="no-highlight" contenteditable="contenteditable">Get-ChildItem ~/.ssh/keys | ForEach-Object {
-	Add-SshKey $_.FullName
-}</code></pre>
-						</li>
-						<li>Register your public key(s) with your Git hosting provider - that particular process depends on
-						the hosting provider, but usually consists of simply pasting your public key somewhere</li>
-					</ul>
-					<aside class="notes">
-						Demo:
-						- demonstrate public key registration with http://githost.com/
-						- username: lukas.angerer@comparis.ch
-						- password: anno1602
-						- show SSH key registration process
-						- create repository (demo-00x)
-					</aside>
-				</section>
-			</section>
-			
+
 			<section id="remote-repositories">
 				<section>
 					<h2>Remote Repositories</h2>
@@ -866,30 +703,30 @@ Launching default browser to display HTML ...</code></pre>
 						</li>
 					</ul>
 					<aside class="notes">
-						Demo (Adam & Bob):
+						Demo (Adam &amp; Bob):
 						- Adam:
 						- update demo project with snippet-005
-						- commit & push
+						- commit &amp; push
 						- Bob:
-						- fetch & merge manually
+						- fetch &amp; merge manually
 						- update demo project with snippet-006
-						- commit & push
+						- commit &amp; push
 					</aside>
 				</section>
 				<section>
 					<h2>Pushing with Conflicts</h2>
 					<img src="images/push-conflict.svg" style="max-width: 900px; max-height: 470px;" />
 					<aside class="notes">
-						Example with trying to push to an updated origin, pull (which merges) and fetch & rebase
+						Example with trying to push to an updated origin, pull (which merges) and fetch &amp; rebase
 						Demo (Adam):
 						- update demo project with snippet-007
 						- commit and attempt push (=> no FF)
-						- pull & resolve
+						- pull &amp; resolve
 						- push again (=> works)
 					</aside>
 				</section>
 			</section>
-			
+
 			<section id="submodules">
 				<section>
 					<h2>Submodules</h2>
@@ -902,7 +739,7 @@ Launching default browser to display HTML ...</code></pre>
 							<strong>git submodules</strong> command
 							<ul>
 								<li>Gitlinks are simply entries in tree objects that point to a commit instead of a blob or subtree</li>
-								<li>Gitlinks however do not contain the information on <em>which</em> repository the commit belongs to - 
+								<li>Gitlinks however do not contain the information on <em>which</em> repository the commit belongs to -
 									that's why we need some more configuration</li>
 							</ul>
 						</li>
@@ -940,7 +777,7 @@ Launching default browser to display HTML ...</code></pre>
 					</ul>
 				</section>
 			</section>
-			
+
 			<section id="bibliography">
 				<h2>Bibliography</h2>
 				<ul>
@@ -951,7 +788,7 @@ Launching default browser to display HTML ...</code></pre>
 			</section>
 		</div>
 	</div>
-	
+
 	<script src="lib/reveal/lib/js/head.min.js"></script>
 	<script src="lib/reveal/js/reveal.min.js"></script>
 	<script type="text/javascript">
@@ -966,7 +803,7 @@ Launching default browser to display HTML ...</code></pre>
 			keyboard: true,
 			// Loop the presentation
 			loop: false,
-			// Number of milliseconds between automatically proceeding to the 
+			// Number of milliseconds between automatically proceeding to the
 			// next slide, disabled when set to 0
 			autoSlide: 0,
 			// Enable slide navigation via mouse wheel

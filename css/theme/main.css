@@ -1,6 +1,6 @@
 /**
  * The default theme for reveal.js presentations.
- * 
+ *
  * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
  */
 
@@ -30,17 +30,17 @@ body {
  * HEADERS
  *********************************************/
 
-.reveal h1, 
-.reveal h2, 
-.reveal h3, 
-.reveal h4, 
-.reveal h5, 
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
 .reveal h6 {
 	margin: 0 0 20px 0;
 	color: #000;
 	line-height: 0.9em;
 	letter-spacing: 0.02em;
-	
+
 	/*text-transform: uppercase;*/
 	text-shadow: 0px 0px 6px rgba(0,0,0,0.2);
 }
@@ -76,7 +76,7 @@ body {
 }
 	.reveal a:not(.image):hover {
 		color: hsl(185, 85%, 70%);
-		
+
 		text-shadow: none;
 		border: none;
 		border-radius: 2px;
@@ -97,11 +97,11 @@ body {
 	margin: 30px 0 0 0;
 	background: rgba(255,255,255,0.12);
 	border: 4px solid #eee;
-	
+
 	-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 	   -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 	        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-	
+
 	-webkit-transition: all .2s linear;
 	   -moz-transition: all .2s linear;
 	    -ms-transition: all .2s linear;
@@ -112,7 +112,7 @@ body {
 	.reveal a:hover img {
 		background: rgba(255,255,255,0.2);
 		border-color: #13DAEC;
-		
+
 		-webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
 		   -moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
 		        box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
@@ -158,7 +158,7 @@ body {
 	height: 50px;
 	width: 100%;
 	bottom: 0px;
-	background-color: #66cc00;
+	background-color: #99bbff;
 	display: table;
 	font-size: 60%;
 }
