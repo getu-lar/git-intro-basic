@@ -388,7 +388,7 @@ Launching default browser to display HTML ...***</code></pre>
 					</ul>
 					<aside class="notes">
 						Demo (Adam):
-						- repeat steps from basic example
+						+ repeat steps from basic example with a few tweaks
 						- copy initial project files from template
 						- init a repository
 						- add initial Tic-Tac-Toe sample project files (including .gitignore)
@@ -399,8 +399,9 @@ Launching default browser to display HTML ...***</code></pre>
 						- commit
 						- add snippet-001
 						- git diff
-						- git add --all
+						- git add --interactive
 						- git commit
+						- git diff HEAD^1 HEAD
 					</aside>
 				</section>
 			</section>
@@ -412,7 +413,7 @@ Launching default browser to display HTML ...***</code></pre>
 						<li>You may have noticed the <em>master</em> in the git status command line. This is the current
 						working branch</li>
 						<li><em>master</em> is by convention the name of the primary development branch. In SVN terminology,
-						this would be called <em>trunk</em> or in Comparis terminology, this would be <em>Development</em></li>
+						this would be called <em>trunk</em> or in the DDT team's convention, this is called <em>integration</em></li>
 						<li>In Git, branches are easy to manage, cheap to create and generally a pleasure to work with</li>
 						<li>You can keep branches locally, share them with other developers and push them to a central repository</li>
 						<li>You can / should create branches:
@@ -455,7 +456,7 @@ Launching default browser to display HTML ...***</code></pre>
 						- add DummyPlayer (snippet-003)
 						- commit
 						- switch back to master
-						- show project state on master
+						- show project state on master (unchanged)
 					</aside>
 				</section>
 				<section>
@@ -478,9 +479,12 @@ Launching default browser to display HTML ...***</code></pre>
 						<li>Keeping feature branches separate from your <em>master</em> makes the history <strong>much</strong>
 						easier to read</li>
 						<li>Branches, just like <em>tags</em> are really just <em>pointers</em> to a commit - the so-called
-							<em>tip</em> of that branch - they are simply used to navigate the content space
+							<em>tip</em> of that branch - they are simply used as labels to navigate the content space
 						</li>
 					</ul>
+					<aside class="notes">
+						every commit you make during development should be an atomic change - not multiple unrelated changes
+					</aside>
 				</section>
 				<section>
 					<h2>Referring to Commits</h2>
