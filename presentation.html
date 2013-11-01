@@ -282,11 +282,17 @@ Launching default browser to display HTML ...***</code></pre>
 					<h2>Inside Git</h2>
 					<div class="left" style="width: 500px">
 						<ul>
-							<li>Git stores different kinds of objects: <em>blobs</em>, <em>trees</em>, <em>commits</em> and <em>tags</em></li>
+							<li>Git stores different kinds of objects: <em>blobs</em> (files), <em>trees</em> (file hierarchy), <em>commits</em> and <em>tags</em></li>
 							<li>Every object is hashed and all references point to hashes</li>
-							<li>All objects are stored in full, but compressed - no deltas</li>
+							<li>All objects are stored in full, but compressed - <strong>no deltas</strong></li>
 							<li>You can look at the objects using the low-level command
-							<pre><code class="no-highlight" contenteditable="contenteditable">git cat-file -p &lt;hash&gt;</code></pre></li>
+							<pre><code class="no-highlight" contenteditable="contenteditable">git cat-file (-p|-s|-t) &lt;hash&gt;</code></pre>
+								<ul>
+									<li><strong>-p</strong> : (pretty-)print</li>
+									<li><strong>-s</strong> : size</li>
+									<li><strong>-t</strong> : type</li>
+								</ul>
+							</li>
 						</ul>
 					</div>
 					<div class="right">
@@ -298,23 +304,24 @@ Launching default browser to display HTML ...***</code></pre>
 					<p>By inspecting <em>this</em> repository (i.e. the repository where this presentation was created we
 					can take a closer look at the Git objects.</p>
 					<p>We'll start by picking a commit from the log:</p>
-					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>$ git log</strong>
+					<pre><code class="no-highlight" contenteditable="contenteditable">$ git log
   commit 1a83e1988ae9ce177820ec37629a611e2efbac32
   Author: Developer Name <some@email.com>
   Date:   Thu Sep 20 13:53:54 2012 +0200
 
       - slide on git object trees
 ...</code></pre>
-					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>$ git cat-file -p 1a83e1988ae9ce177820ec37629a611e2efbac32</strong>
+					<pre><code class="no-highlight" contenteditable="contenteditable">$ git cat-file -p 1a83e1988ae9ce177820ec37629a611e2efbac32
   tree 37e7605cc1c8c617ff92329fb7da06aa109826ab
   parent 6b34c3f78b04e6047478fa8e052af9f91adcdfdf
-  author lord-executor <executor.dev@gmail.com> 1348142034 +0200
-  committer lord-executor <executor.dev@gmail.com> 1348142034 +0200
+  author lord-executor <some@email.com> 1348142034 +0200
+  committer lord-executor <some@email.com> 1348142034 +0200
 
-  - slide on git object trees</code></pre>
+  slide on git object trees</code></pre>
 					<aside class="notes">
 						Demo (Adam):
 						- show git log
+						- show git cat-file -t with commit hash
 						- show git cat-file -p with commit hash
 					</aside>
 				</section>
@@ -322,13 +329,13 @@ Launching default browser to display HTML ...***</code></pre>
 					<h2>A Tree</h2>
 					<p>A tree essentially lists the contents of a file system directory. It points to other trees (subdirectories)
 					and blobs (files)</p>
-					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>$ git cat-file -p 37e7605cc1c8c617ff92329fb7da06aa109826ab</strong>
+					<pre><code class="no-highlight" contenteditable="contenteditable">$ git cat-file -p 37e7605cc1c8c617ff92329fb7da06aa109826ab
   100644 blob ffea9104896cdd08a3b4b93802acada0e8f3643e    .gitmodules
   040000 tree 1072f131a4704078a1182dce8543f41f30708296    css
   040000 tree 8d8e9a2d55857fdcf23485dda2bc7c9dedcbbf78    images
   040000 tree e48d2082cf799d3b3eea3db981f36dd893ecf290    lib
   100644 blob 3805543c6ecd09736f17e5b47c63d64c5996cd82    presentation.html</code></pre>
-					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>$ git cat-file -p 8d8e9a2d55857fdcf23485dda2bc7c9dedcbbf78</strong>
+					<pre><code class="no-highlight" contenteditable="contenteditable">$ git cat-file -p 8d8e9a2d55857fdcf23485dda2bc7c9dedcbbf78
   100644 blob 224d64730fb2419f3940c00429cd6910abf3839c    git-add-help.png
   100644 blob 2cd4184fdd801c1ab9c86851f3d1b9ebce1c667f    object-tree.dia
   100644 blob a4d6512000a13cd38bb793fa9ef847e5d6814cae    object-tree.svg
@@ -339,13 +346,13 @@ Launching default browser to display HTML ...***</code></pre>
   100644 blob 5394d9a1a414d142caf504a2dfbd5e79cfacf973    three-way-git.svg</code></pre>
 					<aside class="notes">
 						Demo (Adam):
-						- show git cat-file of commit tree from last slide
+						- show git cat-file -p of commit tree from last slide
 					</aside>
 				</section>
 				<section>
 					<h2>A Blob</h2>
 					<p>Blobs contain raw file contents (binary, text, whatever). Here, we take a look at the &quot;object-tree.dia&quot; file:</p>
-					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>$ git cat-file -p 2cd4184fdd801c1ab9c86851f3d1b9ebce1c667f</strong>
+					<pre><code class="no-highlight" contenteditable="contenteditable">$ git cat-file -p 2cd4184fdd801c1ab9c86851f3d1b9ebce1c667f
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;dia:diagram xmlns:dia="http://www.lysator.liu.se/~alla/dia/"&gt;
   &lt;dia:diagramdata&gt;
