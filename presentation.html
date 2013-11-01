@@ -568,79 +568,6 @@ Launching default browser to display HTML ...***</code></pre>
 				</section>
 			</section>
 
-			<section id="history">
-				<section>
-					<h2>Changing History</h2>
-					<ul>
-						<li>The ability to retroactively change the commit history is a controversial topic
-						(particularly between Git and Mercurial proponents)</li>
-						<li>Fact is, that mistakes happen</li>
-						<li>Git relies on the judgement of the developer to make the call whether to change
-						the history or not</li>
-						<li>Changing history can be <strong>destructive</strong>, so do it extremely carefully...</li>
-						<li>... particularly if there are other people that started to work from a commit you are changing</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Amending</h2>
-					<ul>
-						<li>Did you miss a file in your latest commit? Or did you notice a bug you would rather not have in your history?</li>
-						<li>If you haven't made your commit available to others yet (we'll get to that later), you can <em>amend</em> your last commit</li>
-						<li>Make the changes that you forgot in the last commit</li>
-						<li>Ammend the commit with
-							<pre><code class="no-highlight" contenteditable="contenteditable">$ git commit --amend</code></pre>
-						</li>
-						<li>
-							By amending, you create a new commit <strong>replacing</strong> the old one
-							<div style="text-align: center;">
-								<img src="images/amend.svg" style="height: 200px;" />
-							</div>
-						</li>
-					</ul>
-					<aside class="notes">
-						Demo (Adam):
-						- add file for AI random player (snippet-005)
-						- git add TicTacToe.csproj
-						- git commit
-						- notice that stuff is missing
-						- git log &amp; git show HEAD
-						- git add --all
-						- git commit --amend
-						- git log &amp; git show HEAD
-					</aside>
-				</section>
-				<section>
-					<h2>Rebasing Graph</h2>
-					<img src="images/rebase-merge.svg" style="max-height: 470px;" />
-				</section>
-				<section>
-					<h2>Rebasing</h2>
-					<ul>
-						<li>Rebasing is usually used to update a branch to the tip of an <em>upstream</em> branch without having to merge</li>
-						<li>This can give you a much cleaner history for feature branches</li>
-						<li>Git will try to apply <strong>changes</strong> introduced in the current branch to the <em>upstream</em> branch tip
-							<pre><code class="no-highlight" contenteditable="contenteditable">$ git rebase &lt;upstream&gt;</code></pre>
-						</li>
-						<li>Rebase can also be used for branch <em>transplants</em></li>
-					</ul>
-					<aside class="notes">
-						Demo (Adam):
-						- create a new branch from 2nd commit
-						  git branch rebasing {b78cb5de5eba759d2659ffde8a8947b22ae8ef32}
-						- git checkout rebasing
-						- git merge myfeature
-						- switch to conflict branch
-						  git checkout conflict
-						- git rebase rebasing
-						- resolve conflict, same as before
-						- git rebase --continue
-						- go back to rebasing branch and merge like in master
-						  git checkout rebasing
-						  git merge conflict
-					</aside>
-				</section>
-			</section>
-
 			<section id="remote-repositories">
 				<section>
 					<h2>Remote Repositories</h2>
@@ -715,63 +642,24 @@ Launching default browser to display HTML ...***</code></pre>
 				</section>
 			</section>
 
-			<section id="submodules">
-				<section>
-					<h2>Submodules</h2>
-					<ul>
-						<li>Git submodules are a way of adding third party libraries to your project without
-							having to actually copy and include all the files in your repository
-						</li>
-						<li>They are also very useful for maintaining large scale projects as a set of individual repositories</li>
-						<li>They use the concept of <em>gitlinks</em> in combination with some configuration and the
-							<strong>git submodules</strong> command
-							<ul>
-								<li>Gitlinks are simply entries in tree objects that point to a commit instead of a blob or subtree</li>
-								<li>Gitlinks however do not contain the information on <em>which</em> repository the commit belongs to -
-									that's why we need some more configuration</li>
-							</ul>
-						</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Managing Submodules</h2>
-					<ul>
-						<li>Submodules are registered in two places
-							<ul>
-								<li>The project's <strong>.gitmodules</strong> file (repository-wide configuration)</li>
-								<li>The <strong>.git/config</strong> file (your local configuration</li>
-							</ul>
-						</li>
-						<li>Personally, I don't know of a use-case where it would be helpful to have a different local
-							configuration, but apparently there is at least one
-						</li>
-						<li>Adding a submodule
-							<pre><code class="no-highlight" contenteditable="contenteditable">$ git submodule add [-b &lt;branch&gt;] &lt;repository&gt; &lt;path&gt;</code></pre>
-						</li>
-						<li>If you're cloning a repository with submodules, the submodules have to be initialized first (local configuration)
-							<pre><code class="no-highlight" contenteditable="contenteditable">$ git submodule init</code></pre>
-						</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Managing Submodules</h2>
-					<ul>
-						<li>Checking up on submodules
-							<pre><code class="no-highlight" contenteditable="contenteditable">$ git submodule status</code></pre>
-						</li>
-						<li>Updating submodules
-							<pre><code class="no-highlight" contenteditable="contenteditable">$ git submodule update</code></pre>
-						</li>
-					</ul>
-				</section>
-			</section>
-
 			<section id="bibliography">
 				<h2>Bibliography</h2>
 				<ul>
 					<li>Torvalds, Linus et al. <em>git Manual Pages</em>. <a href="http://www.kernel.org/pub/software/scm/git/docs/">http://www.kernel.org/pub/software/scm/git/docs/</a></li>
 					<li>Chacon, Scott. <em>Pro Git</em>. <a href="http://git-scm.com/book/en">http://git-scm.com/book/en</a></li>
 					<li>Loelinger, Jon. <em>Version Control with Git - Powerful Techniques for Centralized and Distributed Project Management</em>. O'Reilly Media Inc. 2009</li>
+				</ul>
+			</section>
+
+			<section id="advanced-topics">
+				<h2>Topics for the advanced Git introduction</h2>
+				<ul>
+					<li>Changing History (rebase)</li>
+					<li>Cleanup (reset, clean, fetch -p)</li>
+					<li>Ignoring local changes</li>
+					<li>Reviews and pull requests</li>
+					<li>Submodules</li>
+					<li>Merge Strategies</li>
 				</ul>
 			</section>
 		</div>
