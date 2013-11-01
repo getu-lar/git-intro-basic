@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>Git on Windows</title>
+	<meta name="description" content="An intorduction to the Git SCM for Windows developers">
+	<meta name="author" content="Lukas Angerer">
+
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="lib/reveal/css/reveal.css">
+	<link rel="stylesheet" href="css/theme/comparis.css">
+
+	<!-- For syntax highlighting -->
+	<link rel="stylesheet" href="lib/reveal/lib/css/zenburn.css">
+	<script src="http://code.jquery.com/jquery-1.8.0.js"></script>
+
+	<script>
+	// If the query includes 'print-pdf' we'll use the PDF print sheet
+	document.write( '<link rel="stylesheet" href="lib/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="state-background">
+			<div class="footer">
+				<div class="cell3 date"><span>2012-09-13</span></div>
+				<div class="cell3 title"><span>Git on Windows</span></div>
+				<div class="cell3"><div class="logo"></div></div>
+			</div>
+		</div>
+		
+		<div class="slides"> 
+			<!--<section>
+				<pre id="notes"></pre>
+				<script>
+					$(document).ready(function () {
+						var notes = $("#notes");
+						$("aside.notes").each(function () {
+							notes.append($(this).parent().find("h2").text());
+							notes.append("\n**********");
+							
+							$.each($(this).text().split("\n"), function(index, line) {
+								notes.append(line.trim());
+								notes.append("\n");
+							});
+							
+							notes.append("**********\n");
+						});
+					});
+				</script>
+			</section>-->
+			<section id="title">
+				<section>
+					<h1>Git on Windows</h1>
+					<h2>CLI FTW</h2>
+				</section>
+				<section>
+					<h2>Summary</h2>
+					<ul>
+						<li>What is Git?</li>
+						<li>Setup / Prerequisites</li>
+						<li>Git Configuration</li>
+						<li>Git 101 Example</li>
+						<li>Inside Git</li>
+						<li>Branching</li>
+						<li>Merging</li>
+						<li>History Management</li>
+						<li>Cloning</li>
+						<li>SSH Configuration</li>
+						<li>Remote Repositories</li>
+						<li>Submodules</li>
+					</ul>
+				</section>
+			</section>
+			
+			<section id="introduction">
+				<section>
+					<h2>What is Git?</h2>
+					
+					<div class="left" style="width: 550px">
+						<ul>
+							<li>Distributed Version Control System
+								<ul>
+									<li>Every developer has his/her own full copy of the repository (including all history)</li>
+									<li>Very heavy focus on easy branching and merging</li>
+									<li>Easy to use, but hard to use right</li>
+									<li>Designed and developed by Linus Torvalds</li>
+									<li>Used for Linux kernel development (talking about a large code base)</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<div class="right">
+						<img style="width: 300px;" src="images/three-way-git.svg" />
+					</div>
+				</section>
+				<section id="what">
+					<h2>What is Git?</h2>
+					<div class="left" style="width: 550px">
+						<ul>
+							<li>A more common scenario: semi-centralized repository
+								<ul>
+									<li>Every developer still has a full copy of the repository</li>
+									<li>Developers can still share things <em>exclusively</em></li>
+									<li>The central origin repository alleviates the problem of firewalls and server software on developer machines</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<div class="right">
+						<img style="width: 300px;" src="images/semi-centralized-git.svg" />
+					</div>
+				</section>
+				<section>
+					<h2>Why should I care?</h2>
+					<ul>
+						<li>TFS may have a nice ALM solution, but as far as actual source control is concerned it is actually pretty lousy. (this problem persists in TFS 2012)</li>
+						<li>SCMs are among the most important tools for developers which justifies investing some time to learn it</li>
+						<li>It is very widely used in the open source and commercial world &rarr; chances are that you'll run into it eventually</li>
+					</ul>
+				</section>
+			</section>
+			
+			<section id="basic-setup">
+				<section>
+					<h2>Basic Setup</h2>
+					<ul>
+						<li>What you will need
+							<ul>
+								<li>Git (from <a href="http://msysgit.github.com/">msysgit.github.com</a> - I prefer the portable version)</li>
+								<li>A command line (we'll use PowerShell)</li>
+								<li>OpenSSH and appropriate configuration/keys (we'll do that later)</li>
+							</ul>
+						</li>
+						<li class="fragment">You could also use graphical tools, but actually understanding Git is easier if you learn it the CLI-way (and it is usually much faster)
+							<ul>
+								<li><a href="http://code.google.com/p/tortoisegit/">TortoiseGit</a></li>
+								<li><a href="http://windows.github.com/">GitHub for Windows</a></li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h2>PowerShell Detour</h2>
+					<ul>
+						<li>If you don't know or don't use PowerShell (as a Windows developer), shame on you.*</li>
+						<li>I could probably fill an entire talk with a PowerShell introduction, but I won't.</li>
+						<li>Get it from <a href="http://www.microsoft.com/en-us/download/details.aspx?id=34595">Microsoft Download Center</a>
+							<ul>
+								<li>Part of the Windows Management Framework</li>
+								<li>Version 3.0 was released 2012-09-04</li>
+								<li>Get it while it's hot!</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Setting up PoshGit</h2>
+					<ul>
+						<li>Install <a href="http://psget.net/">PsGet</a> - a PowerShell module manager
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; (new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex</code></pre>
+						</li>
+						<li>Install PoshGit - provides Git integration in PowerShell
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; install-module posh-git</code></pre>
+						</li>
+						<li>That's it. This is why we use PowerShell (and PsGet) in the first place.</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Setting up PoshGit</h2>
+					<ul>
+						<li>Set Up your PowerShell profile
+							<pre><code class="cs" contenteditable="contenteditable">$env:Path = $env:Path + ";" + "C:\Path\To\Git\bin\folder"
+							
+import-module PsGet
+import-module Posh-Git
+
+# Set up a simple prompt
+function prompt {
+    $realLASTEXITCODE = $LASTEXITCODE
+    # Reset color, which can be messed up by Enable-GitColors
+    $Host.UI.RawUI.ForegroundColor =
+		$GitPromptSettings.DefaultForegroundColor
+    Write-Host($pwd) -nonewline
+    Write-VcsStatus
+    $global:LASTEXITCODE = $realLASTEXITCODE
+    return "> "
+}
+
+Enable-GitColors
+</code></pre>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h2>What You Get</h2>
+					<img src="images/posh-git.png" />
+					<ul>
+						<li>Tab completion of git commands</li>
+						<li>Current branch display in prompt</li>
+						<li>Git status in prompt</li>
+						<li>SSH management cmdlets <em>Start-SshAgent</em>, <em>Stop-SshAgent</em>, <em>Add-SshKey</em></li>
+						<li>TortoiseGit integration into PowerShell</li>
+					</ul>
+				</section>
+			</section>
+			
+			<section id="git-config">
+				<section>
+					<h2>Git Configuration</h2>
+					<ul>
+						<li>The Git configuration is a three level hierarchy
+							<ul>
+								<li>System level <code><em>GitInstallDir</em>/etc/gitconfig</code></li>
+								<li>User level <code>$env:HOME/.gitconfig</code></li>
+								<li>Repository level <code><em>RepoDir</em>/.git/config</code></li>
+							</ul>
+						</li>
+						<li>Even though the repository level configuration applies only to a particular
+						repository, the configuration is still <em>local</em> and not repository content -
+						it will not be synchronized across clones.</li>
+						<li>Settings in the lower levels override settings from the higher levels</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Configuration Options</h2>
+					<ul>
+						<li>You can either modify the config files directly, or ...</li>
+						<li>... you can use the git config command
+							<pre><code class="cs" contenteditable="contenteditable">PS&gt; git config --get &lt;section.name&gt;</code></pre>
+							<pre><code class="cs" contenteditable="contenteditable">PS&gt; git config [--system|--global] &lt;section.name&gt; &lt;value&gt;</code></pre>
+						</li>
+						<li>There are dozens of configuration options grouped in sections
+							<ul>
+								<li>Colors</li>
+								<li>Diff/merge tools</li>
+								<li>Editors</li>
+								<li>Whitespace and line break handling</li>
+								<li>...</li>
+							</ul>
+							check out <a href="http://www.kernel.org/pub/software/scm/git/docs/git-config.html">the Git manual pages</a> for a complete list
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Essential Configuration</h2>
+					<ul>
+						<li>The most important configuration when working with Git is your <code>user</code> settings
+							<pre><code class="cs" contenteditable="contenteditable">[user]
+	name = &quot;Lukas Angerer&quot;
+	email = lukas.angerer@comparis.ch</code></pre>
+						</li>
+						<li>And after that, depending on your Git installation some color configurations are in order
+							<pre><code class="cs" contenteditable="contenteditable">[color]
+	diff = auto
+	status = auto
+	branch = auto</code></pre>
+						</li>
+					</ul>
+					<aside class="notes">
+						Demo (Adam):
+						- show adam's .gitconfig file
+					</aside>
+				</section>
+			</section>
+			
+			<section id="basic-example">
+				<section>
+					<h2>Basic Example</h2>
+					<ul>
+						<li>Initializing a new repository
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git init [--bare] [directory]</code></pre>
+						</li>
+						<li>Checking Git status
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git status</code></pre>
+						</li>
+						<li>Staging changes in the index
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git add [--patch] [--all] [filepattern]</code></pre>
+						</li>
+						<li>Committing changes to the repository
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git commit [-a | --interactive] [--amend] [-m <msg>]</code></pre>
+						</li>
+					</ul>
+					<aside class="notes">
+						Demo (Adam):
+						- copy initial project files from template
+						- init a repository
+						- add initial Tic-Tac-Toe sample project files (including .gitignore)
+						- show git status
+						- show .gitignore file
+						- stage changes
+						- git status again
+						- commit
+						- add snippet-001
+						- git diff
+						- git add --all
+						- git commit
+					</aside>
+				</section>
+				<section>
+					<h2>What was that command again?</h2>
+					<label>List available commands</label>
+					<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git help
+The most commonly used git commands are:
+   add        Add file contents to the index
+   bisect     Find by binary search the change that introduced a bug
+   branch     List, create, or delete branches
+   checkout   Checkout a branch or paths to the working tree
+   ...</code></pre>
+					<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git help -a
+available git commands in 'git-core'
+  add                  help                 remote
+  add--interactive     http-backend         remote-ext
+  am                   http-fetch           remote-fd
+  annotate             http-push            remote-ftp
+  ...</code></pre>
+				</section>
+				<section>
+					<h2>What was that command again?</h2>
+					<label>Get help on a specific command</label>
+					<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git help add
+Launching default browser to display HTML ...</code></pre>
+					<img src="images/git-add-help.png" />
+					<aside class="notes">
+						Demo (Adam):
+						- show git help add in browser
+					</aside>
+				</section>
+			</section>
+			
+			<section id="inside-git">
+				<section>
+					<h2>Inside Git</h2>
+					<div class="left" style="width: 500px">
+						<ul>
+							<li>Git stores different kinds of objects: <em>blobs</em>, <em>trees</em>, <em>commits</em> and <em>tags</em></li>
+							<li>Every object is hashed and all references point to hashes</li>
+							<li>All objects are stored in full, but compressed - no deltas</li>
+							<li>You can look at the objects using the low-level command
+							<pre><code class="no-highlight" contenteditable="contenteditable">git cat-file -p &lt;hash&gt;</code></pre></li>
+						</ul>
+					</div>
+					<div class="right">
+						<img src="images/object-tree.svg" style="max-width: 350px;" />
+					</div>
+				</section>
+				<section>
+					<h2>A Commit</h2>
+					<p>By inspecting <em>this</em> repository (i.e. the repository where this presentation was created we
+					can take a closer look at the Git objects.</p>
+					<p>We'll start by picking a commit from the log:</p>
+					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>PS&gt; git log</strong>
+  commit 1a83e1988ae9ce177820ec37629a611e2efbac32
+  Author: Developer Name <some@email.com>
+  Date:   Thu Sep 20 13:53:54 2012 +0200
+
+      - slide on git object trees
+...</code></pre>
+					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>PS&gt; git cat-file -p 1a83e1988ae9ce177820ec37629a611e2efbac32</strong>
+  tree 37e7605cc1c8c617ff92329fb7da06aa109826ab
+  parent 6b34c3f78b04e6047478fa8e052af9f91adcdfdf
+  author lord-executor <executor.dev@gmail.com> 1348142034 +0200
+  committer lord-executor <executor.dev@gmail.com> 1348142034 +0200
+
+  - slide on git object trees</code></pre>
+					<aside class="notes">
+						Demo (Adam):
+						- show git log
+						- show git cat-file -p with commit hash
+					</aside>
+				</section>
+				<section>
+					<h2>A Tree</h2>
+					<p>A tree essentially lists the contents of a file system directory. It points to other trees (subdirectories)
+					and blobs (files)</p>
+					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>PS&gt; git cat-file -p 37e7605cc1c8c617ff92329fb7da06aa109826ab</strong>
+  100644 blob ffea9104896cdd08a3b4b93802acada0e8f3643e    .gitmodules
+  040000 tree 1072f131a4704078a1182dce8543f41f30708296    css
+  040000 tree 8d8e9a2d55857fdcf23485dda2bc7c9dedcbbf78    images
+  040000 tree e48d2082cf799d3b3eea3db981f36dd893ecf290    lib
+  100644 blob 3805543c6ecd09736f17e5b47c63d64c5996cd82    presentation.html</code></pre>
+					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>PS&gt; git cat-file -p 8d8e9a2d55857fdcf23485dda2bc7c9dedcbbf78</strong>
+  100644 blob 224d64730fb2419f3940c00429cd6910abf3839c    git-add-help.png
+  100644 blob 2cd4184fdd801c1ab9c86851f3d1b9ebce1c667f    object-tree.dia
+  100644 blob a4d6512000a13cd38bb793fa9ef847e5d6814cae    object-tree.svg
+  100644 blob e92e46164fd13f9294201f8f46a6871a3c8928c7    posh-git.png
+  100644 blob 944e4583e6a6bed3b1033d53c6d3d332f142b3a7    semi-centralized-git.dia
+  100644 blob 628ed9c436d707feb72ccc7f5a7e9661813fed03    semi-centralized-git.svg
+  100644 blob f6f3c76619ea4748260287b86c9c890862475d54    three-way-git.dia
+  100644 blob 5394d9a1a414d142caf504a2dfbd5e79cfacf973    three-way-git.svg</code></pre>
+					<aside class="notes">
+						Demo (Adam):
+						- show git cat-file of commit tree from last slide
+					</aside>
+				</section>
+				<section>
+					<h2>A Blob</h2>
+					<p>Blobs contain raw file contents (binary, text, whatever). Here, we take a look at the &quot;object-tree.dia&quot; file:</p>
+					<pre><code class="no-highlight" contenteditable="contenteditable"><strong>PS&gt; git cat-file -p 2cd4184fdd801c1ab9c86851f3d1b9ebce1c667f</strong>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;dia:diagram xmlns:dia="http://www.lysator.liu.se/~alla/dia/"&gt;
+  &lt;dia:diagramdata&gt;
+    &lt;dia:attribute name="background"&gt;
+      &lt;dia:color val="#ffffff"/&gt;
+    &lt;/dia:attribute&gt;
+    &lt;dia:attribute name="pagebreak"&gt;
+      &lt;dia:color val="#000099"/&gt;
+    &lt;/dia:attribute&gt;
+    &lt;dia:attribute name="paper"&gt;
+      &lt;dia:composite type="paper"&gt;
+        &lt;dia:attribute name="name"&gt;
+          &lt;dia:string&gt;#A4#&lt;/dia:string&gt;
+        &lt;/dia:attribute&gt;
+		...</code></pre>
+					<aside class="notes">
+						Demo (Adam):
+						- show git cat-file -p with file hash
+					</aside>
+				</section>
+			</section>
+			
+			<section id="branches">
+				<section>
+					<h2>Branches</h2>
+					<ul>
+						<li>You may have noticed the <em>master</em> in the git status command line. This is the current
+						working branch</li>
+						<li><em>master</em> is by convention the name of the primary development branch. In SVN terminology,
+						this would be called <em>trunk</em> or in Comparis terminology, this would be <em>Development</em></li>
+						<li>In Git, branches are easy to manage, cheap to create and generally a pleasure to work with</li>
+						<li>You can keep branches locally, share them with other developers and push them to a central repository</li>
+						<li>You can / should create branches:
+							<ul>
+								<li>To create new features</li>
+								<li>To try out new experimental stuff</li>
+								<li>To do larger refactorings</li>
+								<li>Just for the fun of it &#9786;</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h2>How to Branch</h2>
+					<ul>
+						<li>Creating a new branch
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git branch &lt;branch&gt;</code></pre>
+						</li>
+						<li>Switching branches
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git checkout &lt;branch&gt;</code></pre>
+							You can also directly create a new branch and switch to it with
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git checkout -b &lt;branch&gt;</code></pre>
+						</li>
+						<li>Moving/renaming a branch
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git branch -m [&lt;oldbranch&gt;] &lt;newbranch&gt;</code></pre>
+						</li>
+						<li>Delete a branch
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git branch -d &lt;branch&gt;</code></pre>
+							if you want to <strong>discard</strong> all unmerged changes from that branch
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git branch -D &lt;branch&gt;</code></pre>
+						</li>
+					</ul>
+					<aside class="notes">
+						Demo (Adam):
+						- (trivial FF merge case)
+						- create feature branch
+						- add files (ICanMove.cs and Move.cs) snippet-002
+						- commit
+						- modify Program.cs (snippet-003)
+						- add DummyPlayer (snippet-003)
+						- commit
+						- switch back to master
+						- show project state on master
+					</aside>
+				</section>
+				<section>
+					<h2>Talking about Branches</h2>
+					<p>When talking about branches it is helpful to visualize them. There is a standard notation
+					that is used in those circumstances: <img src="images/branch-notation.svg" style="max-width: 130px; max-height: 50px; vertical-align: middle" /></p>
+					<p>An example branch/commit history would then look like this:</p>
+					<img src="images/branching-example.svg" style="width: 600px;" />
+					<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git log --graph</code></pre>
+					<aside class="notes">
+						visualize branching structure of current repository
+					</aside>
+				</section>
+				<section>
+					<h2>Why Branches are so Good</h2>
+					<ul>
+						<li>They let you commit often and in isolation. Nobody gets in your way and you don't get in the way
+						of others</li>
+						<li>Branches can have a lifetime from 5 minutes to indefinitely</li>
+						<li>Keeping feature branches separate from your <em>master</em> makes the history <strong>much</strong>
+						easier to read</li>
+						<li>Branches, just like <em>tags</em> are really just <em>pointers</em> to a commit - the so-called
+							<em>tip</em> of that branch - they are simply used to navigate the content space
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Referring to Commits</h2>
+					<ul>
+						<li>Obviously, branches are a great way to refer to certain commits, but there are many different
+							types of references in Git:
+							<ul>
+								<li>By the SHA1 hash - full or identifying substring
+									<code>dae86e1950b1277e545cee180551750029cfe735</code> or <code>dae86e</code>
+								</li>
+								<li>By ref name
+									<code>master</code> or <code>heads/feature/X</code>
+								</li>
+								<li>By special name <code>HEAD</code> (current branch head), <code>FETCH_HEAD</code> (current remote
+									tracking branch head), <code>ORIG_HEAD</code> (base of current pending changes), ...
+								</li>
+								<li>By revision <code>HEAD^1</code> (immediate parent of HEAD), <code>HEAD^2</code> (grandfather of HEAD)</li>
+								<li>And many more...</li>
+							</ul>
+						</li>
+					</ul>
+					<aside class="notes">
+						Demo (Adam):
+						- git show HEAD
+						- git show HEAD^1
+						- git show {branchname}
+					</aside>
+				</section>
+			</section>
+			
+			<section id="merging">
+				<section>
+					<h2>Merging</h2>
+					<ul>
+						<li>Merging creates a new commit by bringing together two (or more!) branches</li>
+						<li>Every branch can be the source or target of a merge</li>
+						<li>To resolve the resulting (inevitalbe) conflicts, Git lets you choose one of several
+						merge strategies - although in most cases the default is more than sufficient</li>
+						<li>Git considers <strong>not</strong> just the two commits that need to be merged, it considers
+						<strong>the history</strong> of commits</li>
+						<li>(Merging is not the same as patching / cherry-picking)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Merge Scenario</h2>
+					<img src="images/merging-example.svg" />
+					<ul>
+						<li>The new merge commit will be <strong>I</strong></li>
+						<li><strong>F</strong> is a previous merge which is obvious due to the fact that it has two parents</li>
+						<li>The last common ancestor of <em>feature</em> and <em>master</em> is commit <strong>E</strong></li>
+						<li>This means that Git has to merge <strong>G</strong> and <strong>H</strong> into <em>master</em></li>
+					</ul>
+					<aside class="notes">
+						Demo (Adam):
+						- create new branch from master (for conflict merge later)
+						- update code on master branch (snippet-004)
+						- commit
+					</aside>
+				</section>
+				<section>
+					<h2>Merging in Action</h2>
+					<ul>
+						<li>Check out the branch you want to merge <strong>into</strong>
+						<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git checkout master</code></pre></li>
+						<li>Merge the changes from the source branch
+						<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git merge [--no-commit] source</code></pre></li>
+						<li>If there are conflicts, you can resolve them using one of the configured merge tools
+						<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git mergetool</code></pre>
+						or merge manually in any editor</li>
+						<li>Check in your merge commit (if this has not already happened)
+						<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git commit</code></pre></li>
+					</ul>
+					<aside class="notes">
+						Demo (Adam):
+						- switch back to master
+						- merge branch from branching sample (FF)
+						- merge conflict branch with
+						- git mergetool
+						- git add (to mark resolved)
+					</aside>
+				</section>
+			</section>
+			
+			<section id="history">
+				<section>
+					<h2>Changing History</h2>
+					<ul>
+						<li>The ability to retroactively change the commit history is a controversial topic
+						(particularly between Git and Mercurial proponents)</li>
+						<li>Fact is, that mistakes happen</li>
+						<li>Git relies on the judgement of the developer to make the call whether to change
+						the history or not</li>
+						<li>Changing history can be <strong>destructive</strong>, so do it extremely carefully...</li>
+						<li>... particularly if there are other people that started to work from a commit you are changing</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Amending</h2>
+					<ul>
+						<li>Did you miss a file in your latest commit? Or did you notice a bug you would rather not have in your history?</li>
+						<li>If you haven't made your commit available to others yet (we'll get to that later), you can <em>amend</em> your last commit</li>
+						<li>Make the changes that you forgot in the last commit</li>
+						<li>Ammend the commit with
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git commit --amend</code></pre>
+						</li>
+						<li>
+							By amending, you create a new commit <strong>replacing</strong> the old one
+							<div style="text-align: center;">
+								<img src="images/amend.svg" style="height: 200px;" />
+							</div>
+						</li>
+					</ul>
+					<aside class="notes">
+						Demo (Adam):
+						- add file for AI random player (snippet-005)
+						- git add TicTacToe.csproj
+						- git commit
+						- notice that stuff is missing
+						- git log & git show HEAD
+						- git add --all
+						- git commit --amend
+						- git log & git show HEAD
+					</aside>
+				</section>
+				<section>
+					<h2>Rebasing Graph</h2>
+					<img src="images/rebase-merge.svg" style="max-height: 470px;" />
+				</section>
+				<section>
+					<h2>Rebasing</h2>
+					<ul>
+						<li>Rebasing is usually used to update a branch to the tip of an <em>upstream</em> branch without having to merge</li>
+						<li>This can give you a much cleaner history for feature branches</li>
+						<li>Git will try to apply <strong>changes</strong> introduced in the current branch to the <em>upstream</em> branch tip
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git rebase &lt;upstream&gt;</code></pre>
+						</li>
+						<li>Rebase can also be used for branch <em>transplants</em></li>
+					</ul>
+					<aside class="notes">
+						Demo (Adam):
+						- create a new branch from 2nd commit
+						  git branch rebasing {b78cb5de5eba759d2659ffde8a8947b22ae8ef32}
+						- git checkout rebasing
+						- git merge myfeature
+						- switch to conflict branch
+						  git checkout conflict
+						- git rebase rebasing
+						- resolve conflict, same as before
+						- git rebase --continue
+						- go back to rebasing branch and merge like in master
+						  git checkout rebasing
+						  git merge conflict
+					</aside>
+				</section>
+			</section>
+			
+			<section id="sharing">
+				<section>
+					<h2>Clone Wars</h2>
+					<ul>
+						<li>Every git repository is a <strong>fully</strong> functional self-contained unit</li>
+						<li>Sharing a repository with somebody else is essentially creating a copy or <strong>clone</strong>
+						in Git terminology</li>
+						<li>Every repository can track any number of remote repositories and <strong>push</strong> /
+						<strong>pull</strong> changes to / from
+						them at any time.</li>
+						<li>Every repository that was cloned from another automatically tracks that remote repository which
+						(by convention) is called <strong>origin</strong></li>
+					</ul>
+				</section>
+				<section>
+					<h2>Sharing Among Friends</h2>
+					<ul>
+						<li>You can easily share repositories within / from
+							<ul>
+								<li>the local file system
+									<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git clone file:///path/to/origin/repository/</code></pre>
+								</li>
+								<li>a network share
+									<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git clone file:////server/share/repository/path/</code></pre>
+								</li>
+								<li>an FTP server
+									<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git clone ftp://host/path/to/repository/</code></pre>
+								</li>
+								<li>an <em>rsync</em> server
+									<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git clone rsync://host/path/to/repository/</code></pre>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<aside class="notes">
+						Demo (Bob):
+						- start bob's shell
+						- clone Adam's repository directly ("from-adam")
+						  git clone file:///$env:DEMOROOT/users/adam/TicTacToe from-adam
+						- show repository state
+						- workspace and configuration might be different, but the content of the repository is a CLONE
+					</aside>
+				</section>
+				<section>
+					<h2>Bare repositories</h2>
+					<ul>
+						<li><em>Bare</em> repositories are <em>HEAD</em>less repositories that just contain the Git metadata
+						and no working tree</li>
+						<li>They are very useful as shared repositories</li>
+						<li>Instead of sharing your <em>working</em> repository, export a shared bare repository that you and others
+						can push/pull to/from.
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git clone --bare file:///path/to/my/repo file:////server/public/repo</code></pre>
+						</li>
+						<li>Bare repositories only contain the contents of the <em>.git</em> directory, nothing else</li>
+					</ul>
+					<aside class="notes">
+						Demo (Adam & Bob):
+						- Adam: export repository to shared (bare) repository
+						- cd $env:DEMOROOT
+						- git clone --bare file:///$env:HOME/TicTacToe tictactoe.git
+						- show 'bare' repository contents
+						- Bob: clone the shared repository
+						- git clone file:///$env:DEMOROOT/tictactoe.git
+					</aside>
+				</section>
+				<section>
+					<h2>But what about Security?</h2>
+					<ul>
+						<li>Git itself does <strong>not</strong> contain any authentication or authorization mechanism</li>
+						<li>Git is designed to be easily integrated in existing authentication and authorization infrastructure
+							<ul>
+								<li>Local file system access control (Windows ACLs, Unix groups, ...)</li>
+								<li>HTTP basic authentication</li>
+								<li>SSH username/password or public key based access (this is what we'll be looking at)</li>
+							</ul>
+						</li>
+						<li>Access rights can only be specified on <strong>repository</strong> level; you cannot limit access to
+						subtrees in the repository</li>
+						<li>There are however ways to organize your repositories that give you the necessary level of granularity
+						(see <em>modules</em>)</li>
+					</ul>
+				</section>
+			</section>
+			
+			<section id="ssh-configuration">
+				<section>
+					<h2>SSH Configuration</h2>
+					<ul>
+						<li>The most commonly used authentication / authorization mechanism used for Git is SSH
+							<ul>
+								<li><a href="https://github.com/">https://github.com/</a></li>
+								<li><a href="https://bitbucket.org/">https://bitbucket.org/</a></li>
+								<li><a href="http://githost.com/">http://githost.com/</a></li>
+							</ul>
+						</li>
+						<li>Getting SSH to work properly under windows can be somewhat frustrating</li>
+						<li>What you need:
+							<ul>
+								<li>OpenSSH - comes with PortableGit</li>
+								<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a>, particularly
+								puttygen.exe to generate key pairs</li>
+								<li>At least one pair of public/private keys</li>
+								<li>Some configuration</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Generating a Key Pair</h2>
+					<div style="float: right">
+						<img src="images/puttygen-key1.png" style="height: 250px;" /><br />
+						<img src="images/puttygen-key2.png" style="height: 250px;" />
+					</div>
+					<ul>
+						<li>Open PuTTY Key Generator</li>
+						<li>Generate a 2048 Bit SSH-2 RSA key</li>
+						<li>Set the comment to an identifier that will help you figure out which account it belongs to</li>
+						<li>Set a password for the private key</li>
+						<li>Copy the OpenSSH public key (store it somewhere safe)</li>
+						<li><em>Conversions &rarr; Export OpenSSH Key</em><br />to store your private
+						key</li>
+						<li>Keep it secret, keep it safe!<br />
+						Either by password protecting the key file or only storing it on your local (password protected)
+						machine</li>
+					</ul>
+					<aside class="notes">
+						Demo:
+						- create key pari with puttygen.exe
+					</aside>
+				</section>
+				<section>
+					<h2>Configuring OpenSSH</h2>
+					<ul>
+						<li>Create an <strong>.ssh</strong> directory in your <em>HOME</em> (<code>$env:HOME</code>)</li>
+						<li>Put your private key (or keys if you have more than one) in a <strong>.ssh/keys</strong> directory</li>
+						<li>Update your PowerShell profile to automatically start the SSH agent (responsible for managing
+							your identities)
+							<pre><code class="no-highlight" contenteditable="contenteditable">Start-SshAgent</code></pre>
+						</li>
+						<li>Also register all your keys on startup - that makes it a whole lot easier
+							<pre><code class="no-highlight" contenteditable="contenteditable">Get-ChildItem ~/.ssh/keys | ForEach-Object {
+	Add-SshKey $_.FullName
+}</code></pre>
+						</li>
+						<li>Register your public key(s) with your Git hosting provider - that particular process depends on
+						the hosting provider, but usually consists of simply pasting your public key somewhere</li>
+					</ul>
+					<aside class="notes">
+						Demo:
+						- demonstrate public key registration with http://githost.com/
+						- username: lukas.angerer@comparis.ch
+						- password: anno1602
+						- show SSH key registration process
+						- create repository (demo-00x)
+					</aside>
+				</section>
+			</section>
+			
+			<section id="remote-repositories">
+				<section>
+					<h2>Remote Repositories</h2>
+					<img src="images/remote-repositories.svg" style="float: right; width: 350px; margin-left: 10px;" />
+					<ul>
+						<li>Every branch can have multiple remotely tracked branches associated with it</li>
+						<li>The normal case is to have <em>one</em> remote tracking branch from a remote called <em>origin</em></li>
+						<li>Tracking multiple remotes can be useful for <em>forking</em> which is commonly used on github</li>
+						<li>You can pull in changes from different remote repositories - even from different branches -
+						provided that there is a common base</li>
+					</ul>
+					<aside class="notes">
+						Demo (Adam):
+						- add another remote to Adam's project
+						  git remote add upstream [some-githost-url]
+					</aside>
+				</section>
+				<section>
+					<h2>Pulling</h2>
+					<ul>
+						<li>A <strong>pull</strong> pulls new information from <em>origin</em> into the current working branch
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git pull [&lt;remote&gt; [&lt;remote-branch&gt;[:&lt;local-branch&gt;]]]</code></pre>
+						</li>
+						<li>Pulling is technically
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git fetch [&lt;remote&gt; [&lt;remote-branch&gt;]]</code></pre>
+							which updates the remote tracking branch and
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git merge origin/&lt;remote-branch&gt;</code></pre>
+							which merges the remote tracking branch into the current branch
+						</li>
+						<li>Pulling is generally associated with a <em>fast-forward</em>* merge, but it is not at all
+						unusual to have merge conflicts when pulling from a branch under heavy development</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Pushing</h2>
+					<ul>
+						<li>A <strong>push</strong> pushes changes from your current working branch(es) to <em>origin</em>
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git push [&lt;remote&gt; [&lt;local-branch&gt;[:&lt;remote-branch&gt;]]]</code></pre>
+						</li>
+						<li>Pushing should <em>always</em> be a fast-forward merge since there is nobody at the receiving end
+							that could perform a merge - pushing non-fast-forward changes <em>will</em> result in loss of history
+						</li>
+						<li>By default, <strong>push</strong> does not allow you to do non-fast-forward operations... This is
+							where rebasing can come in handy
+						</li>
+						<li>Recovering from dangling commits and other accidents is possible, but requires some more
+							low-level knowledge and commands
+						</li>
+					</ul>
+					<aside class="notes">
+						Demo (Adam & Bob):
+						- Adam:
+						- update demo project with snippet-005
+						- commit & push
+						- Bob:
+						- fetch & merge manually
+						- update demo project with snippet-006
+						- commit & push
+					</aside>
+				</section>
+				<section>
+					<h2>Pushing with Conflicts</h2>
+					<img src="images/push-conflict.svg" style="max-width: 900px; max-height: 470px;" />
+					<aside class="notes">
+						Example with trying to push to an updated origin, pull (which merges) and fetch & rebase
+						Demo (Adam):
+						- update demo project with snippet-007
+						- commit and attempt push (=> no FF)
+						- pull & resolve
+						- push again (=> works)
+					</aside>
+				</section>
+			</section>
+			
+			<section id="submodules">
+				<section>
+					<h2>Submodules</h2>
+					<ul>
+						<li>Git submodules are a way of adding third party libraries to your project without
+							having to actually copy and include all the files in your repository
+						</li>
+						<li>They are also very useful for maintaining large scale projects as a set of individual repositories</li>
+						<li>They use the concept of <em>gitlinks</em> in combination with some configuration and the
+							<strong>git submodules</strong> command
+							<ul>
+								<li>Gitlinks are simply entries in tree objects that point to a commit instead of a blob or subtree</li>
+								<li>Gitlinks however do not contain the information on <em>which</em> repository the commit belongs to - 
+									that's why we need some more configuration</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Managing Submodules</h2>
+					<ul>
+						<li>Submodules are registered in two places
+							<ul>
+								<li>The project's <strong>.gitmodules</strong> file (repository-wide configuration)</li>
+								<li>The <strong>.git/config</strong> file (your local configuration</li>
+							</ul>
+						</li>
+						<li>Personally, I don't know of a use-case where it would be helpful to have a different local
+							configuration, but apparently there is at least one
+						</li>
+						<li>Adding a submodule
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git submodule add [-b &lt;branch&gt;] &lt;repository&gt; &lt;path&gt;</code></pre>
+						</li>
+						<li>If you're cloning a repository with submodules, the submodules have to be initialized first (local configuration)
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git submodule init</code></pre>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Managing Submodules</h2>
+					<ul>
+						<li>Checking up on submodules
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git submodule status</code></pre>
+						</li>
+						<li>Updating submodules
+							<pre><code class="no-highlight" contenteditable="contenteditable">PS&gt; git submodule update</code></pre>
+						</li>
+					</ul>
+				</section>
+			</section>
+			
+			<section id="bibliography">
+				<h2>Bibliography</h2>
+				<ul>
+					<li>Torvalds, Linus et al. <em>git Manual Pages</em>. <a href="http://www.kernel.org/pub/software/scm/git/docs/">http://www.kernel.org/pub/software/scm/git/docs/</a></li>
+					<li>Chacon, Scott. <em>Pro Git</em>. <a href="http://git-scm.com/book/en">http://git-scm.com/book/en</a></li>
+					<li>Loelinger, Jon. <em>Version Control with Git - Powerful Techniques for Centralized and Distributed Project Management</em>. O'Reilly Media Inc. 2009</li>
+				</ul>
+			</section>
+		</div>
+	</div>
+	
+	<script src="lib/reveal/lib/js/head.min.js"></script>
+	<script src="lib/reveal/js/reveal.min.js"></script>
+	<script type="text/javascript">
+		Reveal.initialize({
+			// Display controls in the bottom right corner
+			controls: true,
+			// Display a presentation progress bar
+			progress: true,
+			// Push each slide change to the browser history
+			history: false,
+			// Enable keyboard shortcuts for navigation
+			keyboard: true,
+			// Loop the presentation
+			loop: false,
+			// Number of milliseconds between automatically proceeding to the 
+			// next slide, disabled when set to 0
+			autoSlide: 0,
+			// Enable slide navigation via mouse wheel
+			mouseWheel: true,
+			// Apply a 3D roll to links on hover
+			rollingLinks: true,
+			// Transition style
+			transition: 'default', // default/cube/page/concave/linear(2d)
+			dependencies: [
+					{ src: 'lib/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'lib/reveal/plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'lib/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'lib/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+		});
+	</script>
+</body>
+
+</html>
