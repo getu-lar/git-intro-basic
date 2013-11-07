@@ -146,17 +146,165 @@ snippet-003
 		writeLine("Hit RETURN to quit");
 		readLine();
 	}
-
-		
 -----------
 snippet-004
 -----------
+	private void run()
+			throws IOException
+	{
+		writeLine("Welcome to Tic-Tac-Toe");
+		writeLine("Enter 'q' or 'quit' to exit");
+		
+		final Board board = new Board();
+		
+		writeLine(null);
+		if (board.getWinner() == null)
+		{
+			writeLine("The game ended in a tie :-/");
+		}
+		else
+		{
+			writeLine(String.format("Player '%c' has won the game", board.getWinner().getPlayerChar()));
+		}
+		
+		board.writeBoard(_writer);
+		writeLine(null);
+		
+		writeLine("Hit RETURN to quit");
+		readLine();
+	}
 -----------
 snippet-005
 -----------
+package tictactoe;
+
+import java.util.*;
+import tictactoe.base.*;
+
+public class AiPlayerRandom implements ICanMove
+{
+	@Override
+	public Move makeMove()
+			throws Exception
+	{
+		throw new Exception("not implemented");
+	}
+}
 -----------
 snippet-006
 -----------
+public class AiPlayerRandom implements ICanMove
+{
+	private Board _board;
+	private Random _random;
+	private Player _player;
+	
+	public AiPlayerRandom(Board board, Player player)
+	{
+		_board = board;
+		_random = new Random();
+		_player = player;
+	}
+	
+	public Player getPlayer()
+	{
+		return _player;
+	}
+
+	@Override
+	public Move makeMove()
+			throws Exception
+	{
+		List<String> errors;
+		int col, row, count = 0;
+		
+		do
+		{
+			col = _random.nextInt(3);
+			row = _random.nextInt(3);
+			if (count++ > 100)
+				throw new Exception("Could not find a valid move in 100 tries");
+			
+			errors = _board.validateMove(_player, col, row);
+		} while (errors.size() > 0);
+		
+		return new Move(col, row);
+	}
+}
+===
+	private HashMap<Player, ICanMove> _players;
+===
+	_players = new HashMap<Player, ICanMove>() {{
+			put(board.getPlayerO(), new AiPlayerRandom(board, board.getPlayerO()));
+			put(board.getPlayerX(), new AiPlayerRandom(board, board.getPlayerX()));
+		}};
+
 -----------
 snippet-007
 -----------
+(rename!)
+public class TextPlayer implements ICanMove
+{
+	private static HashMap<Character, Integer> Columns = new HashMap<Character, Integer>() {{
+		put('a', 0);
+		put('b', 1);
+		put('c', 2);
+	}};
+	private static HashMap<Character, Integer> Rows = new HashMap<Character, Integer>() {{
+		put('1', 0);
+		put('2', 1);
+		put('3', 2);
+	}};
+	
+	private BufferedReader _reader;
+	private BufferedWriter _writer;
+	
+	public TextPlayer(BufferedReader reader, BufferedWriter writer)
+	{
+		_reader = reader;
+		_writer = writer;
+	}
+	
+	@Override
+	public Move makeMove()
+	{
+		String input = null;
+		Boolean inputError = false;
+		
+		do
+		{
+			try
+			{
+				if (inputError)
+				{
+					_writer.write("Invalid input. Try again.");
+					_writer.newLine();
+				}
+				
+				input = _reader.readLine();
+				
+				if (input != null && input.charAt(0) == 'q')
+					return new Move();
+				
+				inputError = (
+						input == null ||
+						input.length() < 2 ||
+						!Columns.containsKey(input.charAt(0)) ||
+						!Rows.containsKey(input.charAt(1))
+					);
+			}
+			catch (IOException e)
+			{
+				inputError = true;
+			}
+		} while(inputError);
+
+		return new Move(Columns.get(input.charAt(0)), Rows.get(input.charAt(1)));
+	}
+
+}
+===
+	_players = new HashMap<Player, ICanMove>() {{
+			put(board.getPlayerO(), new TextPlayer(_reader, _writer));
+			put(board.getPlayerX(), new TextPlayer(_reader, _writer));
+		}};
