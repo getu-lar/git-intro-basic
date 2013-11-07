@@ -1,0 +1,162 @@
+-----------
+snippet-001
+-----------
+	private BufferedReader _reader;
+	private BufferedWriter _writer;
+===
+	public Application()
+	{
+		_reader = new BufferedReader(new InputStreamReader(System.in));
+		_writer = new BufferedWriter(new OutputStreamWriter(System.out));
+	}
+===
+	private void run()
+		throws IOException
+	{
+		writeLine("Welcome to Tic-Tac-Toe");
+		writeLine(null);
+
+		final Board board = new Board();
+					
+		board.writeBoard(_writer);
+
+		writeLine(String.format("Player '%c's move", board.getCurrentPlayer().getPlayerChar()));
+		
+		writeLine("Hit RETURN to quit");
+		readLine();
+	}
+===
+	private void writeLine(String line)
+	{
+		if (line == null)
+			System.out.println("");
+		else
+			System.out.println(line);
+	}
+	
+	private String readLine()
+	{
+		try
+		{
+			String line = _reader.readLine();
+			return line;
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+-----------
+snippet-002
+-----------
+package tictactoe;
+
+public class Move
+{
+	private Boolean _isQuit;
+	private Integer _column;
+	private Integer _row;
+	
+	public Move()
+	{
+		_isQuit = true;
+	}
+	
+	public Move(Integer column, Integer row)
+	{
+		_isQuit = false;
+		_column = column;
+		_row = row;
+	}
+	
+	public Boolean getIsQuit()
+	{
+		return _isQuit;
+	}
+	
+	public Integer getColumn()
+	{
+		return _column;
+	}
+	
+	public Integer getRow()
+	{
+		return _row;
+	}
+}
+===
+package tictactoe;
+
+public interface ICanMove
+{
+	Move makeMove() throws Exception;
+}
+-----------
+snippet-003
+-----------
+	private HashMap<Player, ICanMove> _players;
+===
+		
+===
+	private void run()
+		throws IOException
+	{
+		writeLine("Welcome to Tic-Tac-Toe");
+		writeLine(null);
+
+		final Board board = new Board();
+
+		_players = new HashMap<Player, ICanMove>() {{
+			put(board.getPlayerO(), new DummyPlayer());
+			put(board.getPlayerX(), new DummyPlayer());
+		}};
+					
+		while (!board.getIsGameOver())
+		{
+			writeLine(null);
+			board.writeBoard(_writer);
+			
+			writeLine(String.format("Player '%c's move", board.getCurrentPlayer().getPlayerChar()));
+			Move move = null;
+			
+			try
+			{
+				move = _players.get(board.getCurrentPlayer()).makeMove();
+			}
+			catch (Exception e)
+			{
+				writeLine("Error while searching for a valid move:");
+				writeLine(e.toString());
+				return;
+			}
+			
+			try
+			{
+				board.makeMove(board.getCurrentPlayer(), move.getColumn(), move.getRow());
+			}
+			catch (InvalidActivityException e)
+			{
+				writeLine("Illegal move");
+				writeLine(e.getMessage());
+				break;
+			}
+		}
+		
+		writeLine("Hit RETURN to quit");
+		readLine();
+	}
+
+		
+-----------
+snippet-004
+-----------
+-----------
+snippet-005
+-----------
+-----------
+snippet-006
+-----------
+-----------
+snippet-007
+-----------
