@@ -1,0 +1,9 @@
+
+# Installation Instructions
+
+Copy the git-ps1.sh file to your home directory and rename it to .git-ps1.sh
+Add the following line to your .bashrc script
+
+```
+PS1="${PS1:0:${#PS1}-3}\$($(cat ~/.git-ps1.sh))\$ "
+```
