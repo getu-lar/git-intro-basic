@@ -89,7 +89,7 @@
 					<h2>What is Git?</h2>
 					<div class="left" style="width: 550px">
 						<ul>
-							<li>Distributed Version Control System
+							<li><strong>Distributed</strong> Version Control System
 								<ul>
 									<li>Every developer has his/her own full copy of the repository (including all of its history)</li>
 									<li>Very heavy focus on easy branching and merging</li>
@@ -108,7 +108,7 @@
 					<h2>What is Git?</h2>
 					<div class="left" style="width: 550px">
 						<ul>
-							<li>A more common scenario: semi-centralized repository
+							<li>A more common scenario: <strong>semi-centralized</strong> repository
 								<ul>
 									<li>Every developer still has a full copy of the repository</li>
 									<li>The central <strong>origin</strong> repository alleviates the problem of firewalls and server software on developer machines</li>
@@ -124,7 +124,7 @@
 				</section>
 				<section>
 					<h2>Local vs Remote</h2>
-					<p>There is only one difference between a local and a remote repository: remote repositories don't <em>usually</em> have a work tree (what you would consider the source files). They are <em>usually</em> bare, meaning that they only contain the contents of the <code>.git</code> folder; Git's sophisticated, content-addressable database system. In every other respect, local and remote repositories are absolutely equivalent. Remote repositories just have to be <em>more accessible</em>.</p>
+					<p>There is only one difference between a local and a remote repository: remote repositories don't <em>usually</em> have a work tree (what you would consider the source files). They are <em>usually</em> bare, meaning that they only contain the contents of the <code>.git</code> folder; Git's sophisticated, <strong>content-addressable storage</strong> (CAS) system. In every other respect, local and remote repositories are absolutely equivalent. Remote repositories just have to be <em>more accessible</em>.</p>
 				</section>
 			</section>
 
@@ -564,7 +564,7 @@ Launching default browser to display HTML ...***</code></pre>
 						<li>Check out the branch you want to merge <strong>into</strong>
 						<pre><code class="no-highlight" contenteditable="contenteditable">$ git checkout master</code></pre></li>
 						<li>Merge the changes from the source branch
-						<pre><code class="no-highlight" contenteditable="contenteditable">$ git merge [--no-commit] source</code></pre></li>
+						<pre><code class="no-highlight" contenteditable="contenteditable">$ git merge [--no-commit] [--no-ff] source</code></pre></li>
 						<li>If there are conflicts, you can resolve them using one of the configured merge tools
 						<pre><code class="no-highlight" contenteditable="contenteditable">$ git mergetool</code></pre>
 						or merge manually in any editor</li>
@@ -595,8 +595,13 @@ Launching default browser to display HTML ...***</code></pre>
 					</ul>
 					<aside class="notes">
 						Demo (Adam):
-						- add another remote to Adam's project
-						  git remote add upstream [some-githost-url]
+						- create new shared bare repository (presentation user)
+						  mkdir shared; cd shared
+						  git init --bare
+						- add shared remote to Adam's project
+						  git remote add origin file:///home/xyz/shared
+						- push current state to remote repository
+						  git push -u origin master
 					</aside>
 				</section>
 				<section>
