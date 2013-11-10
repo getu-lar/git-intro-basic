@@ -1,0 +1,149 @@
+Essential Configuration
+**********
+Demo (Adam):
+- show adam's .gitconfig file
+- git config --get user.name
+- git config --get user.email
+
+**********
+Basic Example
+**********
+Demo (Adam):
+- copy initial project files from template
+- init a repository
+- add initial Tic-Tac-Toe sample project files (including .gitignore)
+- show git status
+- show .gitignore file
+- stage changes
+- git status again
+- commit
+- add snippet-001
+- git diff
+- git add --all
+- git commit
+
+**********
+What was that command again?
+**********
+Demo (Adam):
+- show git help add as manpage
+
+**********
+A Commit
+**********
+Demo (Adam):
+- show git log
+- show git cat-file -t with commit hash
+- show git cat-file -p with commit hash
+
+**********
+A Tree
+**********
+Demo (Adam):
+- show git cat-file -p of commit tree from last slide
+
+**********
+A Blob
+**********
+Demo (Adam):
+- show git cat-file -p with file hash
+
+**********
+Fundamentals
+**********
+Demo (Adam):
++ repeat steps from basic example with a few tweaks
+- copy initial project files from template
+- init a repository
+- add initial Tic-Tac-Toe sample project files (including .gitignore)
+- show git status
+- show .gitignore file
+- stage changes
+- git status again
+- commit
+- add snippet-001
+- git diff
+- git add --interactive
+- git commit
+- git diff HEAD^1 HEAD
+
+**********
+How to Branch
+**********
+Demo (Adam):
+- (trivial FF merge case)
+- create feature branch
+- add files (ICanMove.cs and Move.cs) snippet-002
+- commit
+- modify Program.cs (snippet-003)
+- add DummyPlayer (snippet-003)
+- commit
+- switch back to master
+- show project state on master (unchanged)
+
+**********
+Talking about Branches
+**********
+visualize branching structure of current repository
+
+**********
+Why Branches are so Good
+**********
+every commit you make during development should be an atomic change - not multiple unrelated changes
+
+**********
+Referring to Commits
+**********
+Demo (Adam):
+- git show HEAD
+- git show HEAD^1
+- git show {branchname}
+
+**********
+Merge Scenario
+**********
+Demo (Adam):
+- create new branch from master (for conflict merge later)
+- update code on master branch (snippet-004)
+- commit
+
+**********
+Merging in Action
+**********
+Demo (Adam):
+- switch back to master
+- merge branch from branching sample (FF)
+- merge conflict branch with
+- git mergetool
+- git add (to mark resolved)
+
+**********
+Remote Repositories
+**********
+Demo (Adam):
+- add another remote to Adam's project
+git remote add upstream [some-githost-url]
+
+**********
+Pushing
+**********
+Demo (Adam &amp; Bob):
+- Adam:
+- update demo project with snippet-005
+- commit &amp; push
+- Bob:
+- fetch &amp; merge manually
+- update demo project with snippet-006
+- commit &amp; push
+
+**********
+Pushing with Conflicts
+**********
+Example with trying to push to an updated origin, pull (which merges) and fetch &amp; rebase
+Demo (Adam):
+- update demo project with snippet-007
+- commit and attempt push (=&gt; no FF)
+- pull &amp; resolve
+- push again (=&gt; works)
+
+**********
