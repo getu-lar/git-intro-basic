@@ -121,8 +121,13 @@ Demo (Adam):
 Remote Repositories
 **********
 Demo (Adam):
-- add another remote to Adam's project
-git remote add upstream [some-githost-url]
+- create new shared bare repository (presentation user)
+mkdir shared; cd shared
+git init --bare
+- add shared remote to Adam's project
+git remote add origin file:///home/xyz/shared
+- push current state to remote repository
+git push -u origin master
 
 **********
 Pushing
